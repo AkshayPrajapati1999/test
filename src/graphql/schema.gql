@@ -1,0 +1,415 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type UserCredentials {
+  id: ID!
+  password: String!
+  passwordResetOtp: String!
+  passwordResetOtpExpires: DateTime!
+  token: String!
+  deviceToken: String!
+  changePasswwordString: String!
+  otpString: String!
+  createdAt: DateTime!
+  unlockOtp: String!
+  unlockOtpExpires: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type CategoryEntity {
+  id: ID!
+  name: String!
+  image: String!
+  tags: String!
+  sessions: Float!
+  subCategories: [SubCategoryEntity!]!
+  isDelete: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+type SubCategoryEntity {
+  id: ID!
+  name: String!
+  tags: String!
+  time: Float!
+  image: String!
+  isDelete: Boolean!
+  sessions: [SessionEntity!]!
+  category: CategoryEntity!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+type SessionEntity {
+  id: ID!
+  subCategory: SubCategoryEntity!
+  userSessions: UserSessionsEntity!
+  name: String!
+  audioUrl: String!
+  totalTime: Float!
+  tags: String!
+  isDelete: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+type UserSessionsEntity {
+  id: ID!
+  user: UserEntity!
+  session: SessionEntity!
+  minTime: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+type PreferencesEntity {
+  id: ID!
+  name: String!
+  userPreferences: UserPreferencesEntity!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+type UserPreferencesEntity {
+  id: ID!
+  user: UserEntity!
+  preferences: PreferencesEntity!
+  is_flag: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+type AchievementsEntity {
+  id: ID!
+  name: String!
+  userAchievements: UserAchievementsEntity!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+type UserAchievementsEntity {
+  id: ID!
+  user: UserEntity!
+  achivement: AchievementsEntity!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+type PrivacyPolicy {
+  id: ID!
+  text: String!
+  version: Float!
+  userPolicy: UserPrivacyPolicyEntity!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+type UserPrivacyPolicyEntity {
+  id: ID!
+  user: UserEntity!
+  policy: PrivacyPolicy!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+type NotificationEntity {
+  id: ID!
+  name: String!
+  userNotifications: UserNotificationEntity!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+type UserNotificationEntity {
+  id: ID!
+  user: UserEntity!
+  notification: NotificationEntity!
+  is_sub_flag: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+type UserEntity {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  image: String!
+  isPrivacyPolicyAccepted: Boolean!
+  acceptedPolicyVersion: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+  credential: UserCredentials!
+  userAchievements: UserAchievementsEntity!
+  userNotifications: UserNotificationEntity!
+  userPolicy: UserPrivacyPolicyEntity!
+  userPreferences: UserPreferencesEntity!
+  userSessions: UserSessionsEntity!
+}
+
+type SessionWithUserMinTime {
+  sessionList: [SessionWithMinTime!]!
+  totalMinTime: Float!
+}
+
+type SessionWithMinTime {
+  session: SessionEntity!
+  minTime: Float!
+}
+
+type UserMeditationTime {
+  date: String!
+  day: String!
+  totalMeditationTime: Float!
+}
+
+type UserMeditationTimeResult {
+  result: [UserMeditationTime!]!
+  totalMeditationTimeWeek: Float!
+  userOverallTime: Float!
+  startDate: String!
+  endDate: String!
+}
+
+type LongestSessions {
+  sessions: [SessionWithUserMinTime!]!
+  totalMinTime: Float!
+  subCategory: SubCategoryEntity!
+  description: String!
+}
+
+type UserProfileType {
+  user: UserEntity
+  totalMeditationTime: Float!
+  longestSession: LongestSessions!
+  achievement: [AchievementsEntity!]
+}
+
+type achievementDescription {
+  achievement: AchievementsEntity!
+  description: String!
+}
+
+type Query {
+  findAll: [UserEntity!]!
+  userInfo: UserEntity!
+  getUserTimeByDay(date: String!): String!
+  getUserProfile: UserProfileType!
+  FindAllCategory: [CategoryEntity!]!
+  findCategory(id: Float!): CategoryEntity!
+  getSubCategories(categoryId: Float, minDuration: Float, maxDuration: Float, tags: String): [SubCategoryEntity!]!
+  getCategoriesWithSubCategoriesAndSessions: [CategoryEntity!]!
+  findAllSubCategories: [SubCategoryEntity!]!
+  findSubCategory(id: Float!): SubCategoryEntity!
+  getSessionList(subCategoryId: Float!): SessionWithUserMinTime!
+  getGoalList: [String!]!
+  findAllSessions: [SessionEntity!]!
+  findSession(sessionId: Float!): SessionEntity!
+  totalSessionTimeOfUser: String!
+  longestSessionOfUser: [LongestSessions!]!
+  getUserTimeByWeek: UserMeditationTimeResult!
+  findPreference(preferenceId: Float!): PreferencesEntity!
+  getUserPreferenceList: [UserPreferencesEntity!]!
+  findAllAchievements: [AchievementsEntity!]!
+  findAchievement(achievementId: Float!): AchievementsEntity!
+  userAchievementList: [AchievementsEntity!]!
+  achievementDescription(achievementId: Float!): achievementDescription!
+  findAllPolicies: [PrivacyPolicy!]!
+  findPolicy(policyId: Float!): PrivacyPolicy!
+  getPrivacyPolicy: String!
+  findNotification(notificationId: Float!): NotificationEntity!
+  getUserNotificationList: [UserNotificationEntity!]!
+}
+
+type Mutation {
+  signUp(input: CreateUserDto!): UserEntity!
+  sendReAcitvationEmail(email: String!): String!
+  update(updateUser: UpdateUserDto!): UserEntity!
+  delete: String!
+  verifyChangePassword(verifyChangePasswordInput: OldPasswordDto!): String!
+  changePassword(changePasswordInput: ChangePasswordDto!): String!
+  forgotPassword(forgotPasswordInput: ForgotPasswordDto!): String!
+  verifyOtp(verifyOtpInput: VerifyOtpDto!): String!
+  resetPassword(resetPasswordInput: ResetPasswordDto!): String!
+  checkEmail(email: String!): String!
+  logIn(logInInput: LoginDto!): String!
+  validateToken(validateTokenInput: ValidateTokenDto!): String!
+  create(createCategoryInput: CreateCategoryDto!): CategoryEntity!
+  updateCategory(id: Float!, updateCategoryInput: UpdateCategoryDto!): CategoryEntity!
+  deleteCategory(id: Float!): String!
+  createSubCategory(createSubCategoryInput: CreateSubCategoryDto!): SubCategoryEntity!
+  updateSubCategory(id: Float!, updateSubCategoryInput: UpdateSubCategoryDto!): SubCategoryEntity!
+  deleteSubCategory(id: Float!): String!
+  createSession(createSessionInput: CreateSessionDto!): SessionEntity!
+  updateSession(sessionId: Float!, updateSessionInput: UpdateSessionDto!): SessionEntity!
+  deleteSession(sessionId: Float!): String!
+  stopSession(sessionStopInput: SessionStopDto!): String!
+  createPreference(createPreferenceInput: CreatePreferenceDto!): PreferencesEntity!
+  updatePreference(preferenceId: Float!, updatePreferenceInput: UpdatePreferenceDto!): PreferencesEntity!
+  deletePreference(preferenceId: Float!): String!
+  userPreference(preferenceId: Float!, flag: Boolean!): String!
+  createAchievement(createAchievemntInput: CreateAchievementsDto!): AchievementsEntity!
+  updateAchievement(achievementId: Float!, updateAchievementInput: UpdateAchievementsDto!): AchievementsEntity!
+  deleteAchievement(achievementId: Float!): String!
+  userAchievement(achievementId: Float!): String!
+  createPolicy(policyInput: CreatePrivacyPolicyDto!): PrivacyPolicy!
+  updatePolicy(policyId: Float!, updatePolicyInput: UpdatePrivacyPolicyDto!): PrivacyPolicy!
+  deletePolicy(policyId: Float!): String!
+  userPolicy(policyId: Float!): String!
+  createNotification(createNotificationInput: CreateNotificationDto!): NotificationEntity!
+  updateNotification(notificationId: Float!, updateNotificationInput: UpdateNotificationDto!): NotificationEntity!
+  deleteNotification(notificationId: Float!): String!
+  userNotification(notificationId: Float!, isSubScribed: Boolean!): String!
+  sendPushNotification(pushNotificationInput: PushNotificationDto!): String!
+}
+
+input CreateUserDto {
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  deviceToken: String!
+}
+
+input UpdateUserDto {
+  firstName: String
+  lastName: String
+  email: String
+}
+
+input OldPasswordDto {
+  oldPassword: String!
+}
+
+input ChangePasswordDto {
+  changePasswordString: String!
+  newPassword: String!
+  confirmPassword: String!
+}
+
+input ForgotPasswordDto {
+  email: String!
+}
+
+input VerifyOtpDto {
+  email: String!
+  otp: String!
+}
+
+input ResetPasswordDto {
+  email: String!
+  otpString: String!
+  newPassword: String!
+  confirmPassword: String!
+}
+
+input LoginDto {
+  email: String!
+  password: String!
+  deviceToken: String!
+}
+
+input ValidateTokenDto {
+  token: String!
+  deviceToken: String!
+}
+
+input CreateCategoryDto {
+  name: String!
+  tags: String!
+}
+
+input UpdateCategoryDto {
+  name: String
+  tags: String
+}
+
+input CreateSubCategoryDto {
+  name: String!
+  category: Float!
+  tags: String!
+  image: String!
+}
+
+input UpdateSubCategoryDto {
+  name: String
+  tags: String
+  image: String
+}
+
+input CreateSessionDto {
+  name: String!
+  tags: String!
+  subCategory: Float!
+}
+
+input UpdateSessionDto {
+  name: String!
+}
+
+input SessionStopDto {
+  sessionId: Float!
+  minTime: Float!
+}
+
+input CreatePreferenceDto {
+  name: String!
+}
+
+input UpdatePreferenceDto {
+  name: String
+}
+
+input CreateAchievementsDto {
+  name: String!
+}
+
+input UpdateAchievementsDto {
+  name: String
+}
+
+input CreatePrivacyPolicyDto {
+  text: String!
+  version: Float!
+}
+
+input UpdatePrivacyPolicyDto {
+  text: String
+  version: Float
+}
+
+input CreateNotificationDto {
+  name: String!
+}
+
+input UpdateNotificationDto {
+  name: String
+}
+
+input PushNotificationDto {
+  notificationId: Float!
+  title: String!
+  body: String!
+  extraData: String!
+}
